@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="vue.js"></script>
+  <script src="vue-router.js"></script>
+</head>
+<body>
+<div id="app">
+  <div class="nav">
+    <router-link to="/vue">容易VUE</router-link>
+    <router-link to="/es6">趣味es6</router-link>
+    <router-link to="/career">人在职场</router-link>
+
+  </div>
+
+  <div class="content">
+    <router-view></router-view>
+
+  </div>
+
+</div>
+
+<script>
+  const vueComponent={
+    template:`<div>
+                这里是《简易vue》教程
+              </div>`
+  };
+
+  const  es6Component={
+    template:`<div>
+                这里是《趣味ES6》教程
+              </div>`
+  };
+
+  const  careerComponent={
+    template:`<div>
+                《混口饭吃》与《工资待遇》
+              </div>`
+  };
+
+  const router=new VueRouter({
+    routes:[
+      {
+        path:"/vue",
+        component:vueComponent
+      },
+      {
+        path : '/es6',
+        component : es6Component
+
+      },
+      {
+        path:'/career',
+        component:careerComponent
+
+      }
+    ]
+
+  });
+
+  const app=new Vue({
+    el:"#app",
+    router
+  });
+
+</script>
+
+</body>
+</html>

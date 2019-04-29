@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="vue.js"></script>
+  <script src="vuex.js"></script>
+  <style>
+    *{magin:0;padding:0;box-sizing:border-box;}
+    .app{width:400px;}
+    .result{padding: 0 10px;
+      text-align:right;
+      color:#fff;
+      height: 50px;
+      line-height: 50px;
+      font-size:24px;background:#5d98bf;}
+    .enter{padding: 0 10px;
+      text-align:right;
+      color:#fff;
+      height: 50px;
+      line-height: 50px;
+      font-size: 24px;background: #4478bf;}
+    .list{display: flex;flex-wrap: wrap;}
+    .list >*{width: 100px;height: 100px;line-height: 50px;
+      text-align: center;background: #eeeeee;vert-align: middle; padding-top: 23px;
+      font-size: 18px;cursor:pointer;color: #000; border: 1px solid #ffffff}
+    .list >*:hover{background: #2eae27}
+    .list > *:last-child{background: #2eae27}
+  </style>
+</head>
+<body>
+  <div id="app" class="app">
+    <div class="result" title="运算结果">{{ result }}</div>
+    <div class="enter" title="输入的值">{{ enter || 0 }}</div>
+    <div class="keys">
+      <div class="list">
+         <keyboard v-for="(v,i) in keys" :value="v"></keyboard>
+      </div>
+    </div>
+  </div>
+
+  <script>
+     Vue.component("keyboard",{
+       props:['value'],
+       template:`<div :data-value="value" @click="getkeyboardValue">{{ value }}</div>`,
+       methods:{
+         getkeyboardValue(event){
+           let value=event.target.dataset.value;
+           this.$store.commit('calculate',value)
+         }
+       }
+     });
+
+     const store= new Vuex.Store({
+       state:{
+         result:'',
+         enter:'',
+       },
+       getters:{},
+       mutations:{
+         calculate(state,value){
+           if(value==="="){
+             state.result=eval(state.enter);
+             state.enter+=value;
+           }else if(value==="c"){
+             state.result=state.enter='';
+           }else{
+             state.enter+=value;
+           }
+         }
+       }
+     });
+
+     let vm=new Vue({
+       el:"#app",
+       data:{
+         keys: [
+           'c', '+', '-', '*',
+           '7', '8', '9', '/',
+           '4', '5', '6', '0',
+           '1', '2', '3', '=',
+         ],
+       },
+       store,
+       computed:{
+         // result(){ 0},
+         // enter(){0},
+         result(){ return this.$store.state.result;},
+         enter(){ return this.$store.state.enter; },
+       }
+     });
+  </script>
+</body>
+</html>
